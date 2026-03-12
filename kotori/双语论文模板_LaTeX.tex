@@ -1,0 +1,160 @@
+% =============================================================================
+% 中英双语对照论文模板 (LaTeX)
+% 使用 paracol 宏包实现左右对照排版
+% =============================================================================
+
+\documentclass[12pt,a4paper]{article}
+
+% ==================== 基础宏包 ====================
+\usepackage[UTF8]{ctex}                    % 中文支持
+\usepackage[utf8]{inputenc}                % UTF-8编码
+\usepackage[T1]{fontenc}                   % 字体编码
+
+% ==================== 页面设置 ====================
+\usepackage{geometry}
+\geometry{
+    left=2.5cm, right=2.5cm,
+    top=2.5cm, bottom=2.5cm,
+    headheight=15pt
+}
+
+% ==================== 双栏对照排版 ====================
+\usepackage{paracol}                       % 双栏对照排版宏包
+\setlength{\columnsep}{2em}                % 两栏之间的间距
+\columnratio{0.6,0.4}                      % 设置栏宽比例：左栏60%，右栏40%
+
+% ==================== 页眉页脚 ====================
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small 引言+部分文献综述}      % 左页眉
+\fancyhead[R]{\small 您的论文标题}          % 右页眉
+\fancyfoot[C]{\thepage}                    % 页脚居中显示页码
+\renewcommand{\headrulewidth}{0.4pt}       % 页眉横线
+
+% ==================== 引用设置 ====================
+\usepackage{natbib}                        % 作者-年份引用格式
+\bibliographystyle{apalike}                % APA-like 引用样式
+
+% ==================== 其他宏包 ====================
+\usepackage{setspace}                      % 行距设置
+\onehalfspacing                            % 1.5倍行距
+\usepackage{microtype}                     % 排版优化
+\usepackage{parskip}                       % 段落间距
+
+% ==================== 标题格式 ====================
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+
+% =============================================================================
+\begin{document}
+
+% ==================== 标题页（可选）====================
+% \title{论文标题}
+% \author{作者姓名}
+% \date{\today}
+% \maketitle
+
+% ==================== 双语引言部分 ====================
+
+% 开始双栏排版
+\begin{paracol}{2}
+
+% ===== 左栏：英文 =====
+\section*{Introduction}
+\addcontentsline{toc}{section}{Introduction}
+
+Algorithms play a central role in the governance of the digital public sphere. 
+They moderate user content on digital platforms by classifying and sanctioning 
+impermissible speech, determine what discourse should be more visible to whom, 
+and shape incentives about how to participate in the digital public sphere 
+\citep{caplan2018, gorwa2020}. While none of these tasks are unique to 
+algorithmic governance, their effects are particularly significant due to ``the 
+sheer scale of the data on which the algorithms operate, the precision with which 
+they can target people, and the speed with which this can be calculated'' 
+\citep[114]{christiano2022}.
+
+Political theorists have been arguing for or against democratic control over 
+algorithms for some time \citep{binns2018, wong2020}. Some argue that the 
+existence of ineliminable moral trade-offs between rival conceptions of fair 
+algorithmic design warrants democratization because only democratic processes 
+of public deliberation and contestation can adequately address a wide range 
+of disagreement \citep[229]{wong2020}. Others investigate the discursive 
+features of a democratic culture that can effectively hold algorithms 
+accountable.
+
+% 切换到右栏
+\switchcolumn
+
+% ===== 右栏：中文 =====
+\section*{引言}
+\addcontentsline{toc}{section}{引言}
+
+算法在数字公共领域的治理中扮演着核心角色。它们通过分类和制裁不被
+允许的言论来管理数字平台上的用户内容，决定哪些话语应向谁更多地
+可见，并塑造关于如何参与数字公共领域的激励 \citep{caplan2018, gorwa2020}。
+虽然这些任务并非算法治理所独有，但其影响尤其显著，这是因为``算法
+所操作的数据规模极其庞大，其定位人群的精确度极高，以及进行计算的
+速度极快'' \citep[114]{christiano2022}。
+
+政治理论家们一段时间以来一直在争论是否应该对算法进行民主控制
+\citep{binns2018, wong2020}。一些人认为，在相互竞争的公平算法设计
+概念之间存在着无法消除的道德权衡，这证明了民主化的正当性，因为
+只有公共审议和竞争的民主过程才能充分应对广泛的分歧
+\citep[229]{wong2020}。另一些人则研究民主文化的论述特征，这种
+文化能够有效地使算法承担责任。
+
+\end{paracol}
+
+% ==================== 如果需要新页面继续双栏 ====================
+\newpage
+
+\begin{paracol}{2}
+
+% 左栏继续英文
+\section*{Literature Review}
+
+Recent scholarship has examined various aspects of algorithmic governance.
+Existing research can be categorized into several streams: technical approaches 
+focusing on fairness metrics, legal approaches emphasizing rights-based 
+frameworks, and political approaches highlighting democratic values.
+
+\switchcolumn
+
+% 右栏继续中文
+\section*{文献综述}
+
+最近的学术研究已经审视了算法治理的各个方面。现有研究可以分为几个
+流派：关注公平指标的技术方法、强调基于权利框架的法律方法，以及
+突出民主价值的政治方法。
+
+\end{paracol}
+
+% ==================== 参考文献 ====================
+\newpage
+\begin{thebibliography}{99}
+
+\bibitem[Binns(2018)]{binns2018}
+Binns, R. (2018). Fairness in machine learning: Lessons from political 
+philosophy. \textit{Proceedings of Machine Learning Research}, 81, 1-11.
+
+\bibitem[Caplan \& Boyd(2018)]{caplan2018}
+Caplan, R., \& Boyd, D. (2018). Isomorphism through algorithms: Institutional 
+dependencies in the case of Facebook. \textit{Big Data \& Society}, 5(1), 1-12.
+
+\bibitem[Christiano(2022)]{christiano2022}
+Christiano, T. (2022). \textit{Democratic legitimacy}. Oxford University Press.
+
+\bibitem[Gorwa et al.(2020)]{gorwa2020}
+Gorwa, R., Binns, R., \& Katzenbach, C. (2020). Algorithmic content 
+moderation: Technical and political challenges in the automation of platform 
+governance. \textit{Big Data \& Society}, 7(1), 1-15.
+
+\bibitem[Wong(2020)]{wong2020}
+Wong, P. H. (2020). Democratizing algorithmic fairness. 
+\textit{Philosophy \& Technology}, 33(2), 225-244.
+
+\end{thebibliography}
+
+\end{document}
