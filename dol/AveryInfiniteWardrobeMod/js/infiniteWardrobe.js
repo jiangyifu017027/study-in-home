@@ -1,185 +1,139 @@
-/**
- * 无限衣柜 Mod - 全地点版
- * 将所有衣柜容量扩展为 99999
- */
-
+// 无限衣柜 Mod v3.1 - 调试版
 (function() {
     'use strict';
-
-    console.log('[无限衣柜Mod] 正在加载...');
-
-    // 目标容量
-    var INFINITE_SPACE = 99999;
-
-    /**
-     * 设置无限衣柜容量
-     */
-    function setInfiniteSpace() {
+    
+    console.log('[无限衣柜Mod] ========== 开始加载 ==========');
+    
+    var INFINITE = 99999;
+    var checkCount = 0;
+    
+    // 核心函数：设置无限容量
+    function setInfiniteWardrobe() {
         try {
-            var vars = State.variables;
-            if (vars.wardrobe) {
-                // 保存原始值（仅保存一次）
-                if (vars.wardrobe._originalSpace === undefined && vars.wardrobe.space !== undefined) {
-                    vars.wardrobe._originalSpace = vars.wardrobe.space;
-                    console.log('[无限衣柜Mod] 已保存原始容量:', vars.wardrobe._originalSpace);
-                }
-                // 设置为无限
-                vars.wardrobe.space = INFINITE_SPACE;
-            }
-        } catch (e) {
-            console.error('[无限衣柜Mod] 设置容量失败:', e);
-        }
-    }
-
-    /**
-     * 重写衣柜相关函数
-     */
-    function patchWardrobeFunctions() {
-        if (!window.setup) {
-            window.setup = {};
-        }
-
-        // 保存原始函数（如果存在）
-        var _originalCheckWardrobeSpace = setup.checkWardrobeSpace;
-        var _originalGetWardrobeSpace = setup.getWardrobeSpace;
-
-        /**
-         * 检查衣柜空间 - 永远返回有足够空间
-         */
-        setup.checkWardrobeSpace = function(slot, count) {
-            return true;
-        };
-
-        /**
-         * 获取衣柜容量 - 返回无限
-         */
-        setup.getWardrobeSpace = function() {
-            return INFINITE_SPACE;
-        };
-
-        /**
-         * 检查是否可以添加物品到衣柜
-         */
-        setup.canAddToWardrobe = function(slot, items) {
-            return true;
-        };
-
-        console.log('[无限衣柜Mod] 函数已重写');
-    }
-
-    /**
-     * 修改 SugarCube 的 State 变量
-     */
-    function hijackWardrobeState() {
-        try {
-            var vars = State.variables;
-            if (!vars.wardrobe) {
-                console.log('[无限衣柜Mod] wardrobe 变量不存在，等待创建...');
+            // 检查 State 是否存在
+            if (typeof State === 'undefined') {
+                console.log('[无限衣柜Mod] State 未定义');
                 return false;
             }
-
-            // 使用 Object.defineProperty 拦截 space 属性
-            var currentSpace = vars.wardrobe.space;
             
-            Object.defineProperty(vars.wardrobe, 'space', {
-                get: function() {
-                    return INFINITE_SPACE;
-                },
-                set: function(value) {
-                    // 允许设置，但 getter 永远返回无限
-                    this._innerSpace = value;
-                },
-                configurable: true,
-                enumerable: true
-            });
-
-            // 保存原始值
-            vars.wardrobe._originalSpace = currentSpace;
-            vars.wardrobe._innerSpace = currentSpace;
-
-            console.log('[无限衣柜Mod] State 变量已拦截');
-            return true;
+            // 检查 variables 是否存在
+            if (!State.variables) {
+                console.log('[无限衣柜Mod] State.variables 未定义');
+                return false;
+            }
+            
+            // 检查 wardrobe 是否存在
+            var wardrobe = State.variables.wardrobe;
+            if (!wardrobe) {
+                console.log('[无限衣柜Mod] wardrobe 未定义');
+                return false;
+            }
+            
+            // 检查当前容量
+            var currentSpace = wardrobe.space;
+            checkCount++;
+            
+            // 如果已经是无限，不重复设置
+            if (currentSpace === INFINITE) {
+                if (checkCount % 10 === 0) {
+                    console.log('[无限衣柜Mod] 检查 #' + checkCount + ': 已经是无限容量');
+                }
+                return true;
+            }
+            
+            // 设置为无限
+            wardrobe.space = INFINITE;
+            
+            // 验证设置是否成功
+            if (wardrobe.space === INFINITE) {
+                console.log('[无限衣柜Mod] ✅ 成功设置容量为:', INFINITE, '(原容量:', currentSpace + ')');
+                return true;
+            } else {
+                console.log('[无限衣柜Mod] ❌ 设置失败，当前容量:', wardrobe.space);
+                return false;
+            }
+            
         } catch (e) {
-            console.error('[无限衣柜Mod] 拦截失败:', e);
+            console.error('[无限衣柜Mod] 错误:', e.message);
             return false;
         }
     }
-
-    /**
-     * 强制修改所有衣柜相关的值
-     */
-    function forceInfiniteWardrobe() {
-        try {
-            var vars = State.variables;
-            
-            // 直接修改 wardrobe.space
-            if (vars.wardrobe) {
-                vars.wardrobe.space = INFINITE_SPACE;
-                
-                // 如果有 space_max 也修改
-                if (vars.wardrobe.space_max !== undefined) {
-                    vars.wardrobe.space_max = INFINITE_SPACE;
-                }
-                
-                console.log('[无限衣柜Mod] 容量已设为:', vars.wardrobe.space);
-            }
-
-            // 修改全局 wardrobe 配置（如果存在）
-            if (window.V && window.V.wardrobe) {
-                window.V.wardrobe.space = INFINITE_SPACE;
-            }
-
-        } catch (e) {
-            console.error('[无限衣柜Mod] 强制修改失败:', e);
+    
+    // 启动函数
+    function startMod() {
+        console.log('[无限衣柜Mod] 正在启动...');
+        
+        // 立即执行一次
+        var result = setInfiniteWardrobe();
+        
+        if (result) {
+            console.log('[无限衣柜Mod] 启动成功！');
+        } else {
+            console.log('[无限衣柜Mod] 启动时未找到 wardrobe，将持续尝试...');
+        }
+        
+        // 每 200ms 检查一次
+        setInterval(function() {
+            setInfiniteWardrobe();
+        }, 200);
+    }
+    
+    // 等待 SugarCube 加载完成
+    function waitForSugarCube() {
+        if (typeof SugarCube !== 'undefined' && SugarCube.State) {
+            console.log('[无限衣柜Mod] SugarCube 已就绪');
+            startMod();
+        } else {
+            setTimeout(waitForSugarCube, 100);
         }
     }
-
-    // ========== 事件监听 ==========
-
-    // 游戏就绪时
-    $(document).on(':storyready', function() {
-        console.log('[无限衣柜Mod] 游戏就绪，正在激活...');
-        patchWardrobeFunctions();
-        
-        // 尝试多种方式修改
-        if (!hijackWardrobeState()) {
-            setInfiniteSpace();
-        }
-        
-        forceInfiniteWardrobe();
-    });
-
-    // 每次 passage 渲染前
-    $(document).on(':passagestart', function() {
-        forceInfiniteWardrobe();
-    });
-
-    // 每次 passage 渲染后
-    $(document).on(':passagedisplay', function() {
-        forceInfiniteWardrobe();
-    });
-
-    // 点击链接时
-    $(document).on('click', 'a', function() {
-        setTimeout(forceInfiniteWardrobe, 100);
-    });
-
-    // 定时检查（备用方案）
-    setInterval(function() {
-        forceInfiniteWardrobe();
-    }, 1000);
-
-    // 立即执行一次
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
-        patchWardrobeFunctions();
-        setTimeout(forceInfiniteWardrobe, 500);
-    } else {
+    
+    // 方式1：立即开始等待
+    waitForSugarCube();
+    
+    // 方式2：DOM 就绪后
+    if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
-            patchWardrobeFunctions();
-            setTimeout(forceInfiniteWardrobe, 500);
+            console.log('[无限衣柜Mod] DOM 已就绪');
+            startMod();
+        });
+    } else {
+        startMod();
+    }
+    
+    // 方式3：监听 passage 变化
+    if (typeof jQuery !== 'undefined') {
+        jQuery(document).on(':passagestart', function() {
+            setInfiniteWardrobe();
+        });
+        
+        jQuery(document).on(':passagedisplay', function() {
+            setInfiniteWardrobe();
         });
     }
-
-    console.log('[无限衣柜Mod] 加载完成 - 容量:', INFINITE_SPACE);
-
+    
+    // 方式4：定时检查 SugarCube
+    var checkInterval = setInterval(function() {
+        if (typeof SugarCube !== 'undefined' && SugarCube.State && SugarCube.State.variables && SugarCube.State.variables.wardrobe) {
+            SugarCube.State.variables.wardrobe.space = INFINITE;
+        }
+    }, 100);
+    
+    // 60秒后停止定时检查
+    setTimeout(function() {
+        clearInterval(checkInterval);
+    }, 60000);
+    
+    // 暴露全局函数供手动调用
+    window.fixWardrobe = function() {
+        var result = setInfiniteWardrobe();
+        if (result) {
+            console.log('[无限衣柜Mod] 手动修复成功！当前容量:', State.variables.wardrobe.space);
+        } else {
+            console.log('[无限衣柜Mod] 手动修复失败');
+        }
+    };
+    
+    console.log('[无限衣柜Mod] ========== 加载脚本结束 ==========');
+    console.log('[无限衣柜Mod] 提示：如果容量未改变，请在控制台输入 fixWardrobe() 手动修复');
 })();
