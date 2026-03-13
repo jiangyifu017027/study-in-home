@@ -1,11 +1,13 @@
 {
   "name": "AveryInfiniteWardrobe",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "scriptFileList": [
     "js/infiniteWardrobe.js"
   ],
+  "tweeFileList": [
+    "tweepatches/wardrobe_patch.twee"
+  ],
   "styleFileList": [],
-  "tweeFileList": [],
   "imgFileList": [],
   "additionFile": [],
   "addonPlugin": [],

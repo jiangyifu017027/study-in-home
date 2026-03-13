@@ -1,0 +1,35 @@
+:: Wardrobe Infinite Space [widget]
+<<widget "setInfiniteWardrobe">>
+	<<set $wardrobe.space to 99999>>
+	<<set $wardrobe.space_max to 99999>>
+<</widget>>
+
+:: Wardrobe Check Patched [widget]
+<<widget "checkWardrobeLimit">>
+	/* 重写的衣柜检查函数，永远返回有足够空间 */
+	<<set _wardrobeHasSpace to true>>
+	<<set _wardrobeRemainingSpace to 99999>>
+<</widget>>
+
+:: StoryCaption [widget]
+<<widget "StoryCaption">>
+	/* 在每个 passage 自动执行，确保容量为无限 */
+	<<if $wardrobe>>
+		<<set $wardrobe.space to 99999>>
+	<</if>>
+<</widget>>
+
+:: PassageHeader
+/* 在每个 passage 开始前执行 */
+<<if $wardrobe>>
+	<<set $wardrobe.space to 99999>>
+	<<set $wardrobe.space_max to 99999>>
+<</if>>
+
+:: Wardrobe Passage Patch
+/* 衣柜 passage 的补丁 */
+<<if passage() is "Wardrobe" or passage() is "Closet" or passage() is "Clothing">>
+	<<if $wardrobe>>
+		<<set $wardrobe.space to 99999>>
+	<</if>>
+<</if>>
