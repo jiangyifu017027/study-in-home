@@ -1,0 +1,78 @@
+\documentclass[12pt,a4paper]{article}
+
+% 基础包
+\usepackage{ctex}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+% 数学
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% 颜色与盒子
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins}
+
+% 取消页码
+\pagestyle{empty}
+
+% 自定义颜色
+\definecolor{mainblue}{RGB}{70,130,180}
+\definecolor{lightgray}{RGB}{245,245,245}
+
+% 段落间距
+\setlength{\parskip}{0.8em}
+
+\begin{document}
+
+% 人工智能
+\section*{\color{mainblue}\large 人工智能}
+
+\begin{tcolorbox}[
+    colback=white,
+    colframe=mainblue,
+    boxrule=0.5pt,
+    arc=2mm,
+    left=15pt,right=15pt,top=10pt,bottom=10pt
+]
+\textbf{任务}\quad
+$\begin{cases}
+    \text{预测}\\
+    \text{决策}
+\end{cases}$
+
+\vspace{0.6em}
+
+\textbf{技术}\quad
+$\begin{cases}
+    \text{搜索}\ \sim\ \text{探索分支好坏}\\
+    \text{推理}\ \sim\ \text{旧知识}\rightarrow\text{新知识}\\
+    \text{学习}=\mathsf{Machine\ Learning}=\text{系统通过经验提升性能}\\
+    \text{博弈}=\mathsf{Reinforcement\ Learning}
+\end{cases}$
+\end{tcolorbox}
+
+% 机器学习的数学定义
+\section*{\color{mainblue}\large 机器学习的数学定义}
+
+\begin{tcolorbox}[
+    colback=lightgray,
+    colframe=lightgray,
+    boxrule=0pt,
+    arc=3mm,
+    left=12pt,right=12pt,top=12pt,bottom=12pt
+]
+针对一个预测任务，其数据集是$\mathcal{D}$，对于一个机器学习预测模型$f$，预测任务的性能指标可以通过一个函数$P(\mathcal{D},f)$来表示，那么机器学习的过程就是在一个给定的模型空间$\mathcal{F}$中，寻找可以最大化性能指标的预测模型$f^*$：
+
+\vspace{1em}
+
+\begin{center}
+\large
+$
+\displaystyle f^* = \mathop{\arg\max}_{f \in \mathcal{F}} P(\mathcal{D},f) = \mathsf{ML}(\mathcal{D})
+$
+\end{center}
+\end{tcolorbox}
+
+\end{document}
